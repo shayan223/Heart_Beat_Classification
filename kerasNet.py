@@ -7,12 +7,13 @@ import matplotlib.pyplot as plot
 import seaborn as sb
 import pandas as pd
 import networkDefs
+
 start = timeit.default_timer()
 ####Set up data reference table########
 setA = pd.read_csv("set_a.csv")
 setA = setA.drop(columns="sublabel")#no sublables, not necesary
 setA = setA.dropna(axis=0)#remove all unlabled rows
-#print(setA)
+
 
 ######## Prepare training data ##########
 data = []
@@ -48,6 +49,9 @@ data = np.stack(data, axis=0)
 
 #########################################
 '''
+###uncomment this section for manual seperation of ###
+###data set to training and testing data ###########
+
 ###### Seperate testing and training data ######
 
 #shuffle list of data then use the random 
@@ -91,14 +95,20 @@ for i in labels:
         labelsAsNum.append(2)
     if(i == 'normal'):
         labelsAsNum.append(3)
-#print(labelsAsNum)
-labelsAsNum = np.asarray(labelsAsNum)
-#print(labelsAsNum.shape)
+
+labelsAsNum = np.asarray(labelsAsNum)#convert to numpy array
+
+###### Free unnecesary data before training network ######
+
+del(setA)
+del(labels)
+del(tempShape)
+
 ###### Define neural network ############
+
 atrNum = maxlen#number of atributes per entry
 dataCount = data.shape[0]#number of data entries
-#print(atrNum)
-networkA = networkDefs.testConvolutional(dataCount,atrNum,classCount)
+networkA = networkDefs.Convolutional_B(dataCount,atrNum,classCount)
 
 ###### Train neural network ############
 #Reshape data to 3d for network
@@ -106,15 +116,16 @@ networkA = networkDefs.testConvolutional(dataCount,atrNum,classCount)
 data = np.expand_dims(data,axis=2)
 labelsAsNum = np.expand_dims(labelsAsNum,axis=1)
 
-#print(data.shape)
+
 networkA.summary()
-print(labelsAsNum.shape, data.shape)
+#print(labelsAsNum.shape, data.shape)
+
 resultsA = networkA.fit(
         data,#data list
         labelsAsNum,#label list
         batch_size=None,#batch size
         epochs=10,#number of training epochs
-        verbose=2,#verbosity of training progress
+        verbose=1,#verbosity of training progress
         callbacks=None,#call back function
         validation_split=.3,#how much data is testing vs training
         validation_data=None,#if testing and training data is seperate

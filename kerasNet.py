@@ -108,6 +108,13 @@ del(tempShape)
 
 atrNum = maxlen#number of atributes per entry
 dataCount = data.shape[0]#number of data entries
+
+#To switch from one neural network to another
+#check networkDefs.py and call:
+#networkDefs./networkname/(...)
+#where /networkname/ is the function of the 
+#desired network in networkDefs.py
+
 networkA = networkDefs.Convolutional_B(dataCount,atrNum,classCount)
 
 ###### Train neural network ############
@@ -116,36 +123,52 @@ networkA = networkDefs.Convolutional_B(dataCount,atrNum,classCount)
 data = np.expand_dims(data,axis=2)
 labelsAsNum = np.expand_dims(labelsAsNum,axis=1)
 
-
 networkA.summary()
-#print(labelsAsNum.shape, data.shape)
 
-resultsA = networkA.fit(
-        data,#data list
-        labelsAsNum,#label list
-        batch_size=None,#batch size
-        epochs=10,#number of training epochs
-        verbose=1,#verbosity of training progress
-        callbacks=None,#call back function
-        validation_split=.3,#how much data is testing vs training
-        validation_data=None,#if testing and training data is seperate
-        shuffle=True#whether or not to shuffle data between epochs
-        #initial_epoch=None,#epoch to continue from if resuming past training
-        #steps_per_epoch=None,#number of samples trained per epoch (None = all)
-        #validation_steps=None,#number of batches to validate before stopping
-        #validation_freq=1#how often to validate, takes int or list of points
-        )
+#callFit to 1 trains the network and graphs the 
+#results/accuracy.
+#if you want to analyse the network without training
+#just change callFit to 0.
+
+callFit = 0 #flags whether or not to train
+epochCount = 1 #number of epochs to be trained upon
+
+if(callFit == 1):
+    resultsA = networkA.fit(
+            data,#data list
+            labelsAsNum,#label list
+            batch_size=None,#batch size
+            epochs=epochCount,#number of training epochs
+            verbose=1,#verbosity of training progress
+            callbacks=None,#call back function
+            validation_split=.1,#how much data is testing vs training
+            validation_data=None,#if testing and training data is seperate
+            shuffle=True#whether or not to shuffle data between epochs
+            #initial_epoch=None,#epoch to continue from if resuming past training
+            #steps_per_epoch=None,#number of samples trained per epoch (None = all)
+            #validation_steps=None,#number of batches to validate before stopping
+            #validation_freq=1#how often to validate, takes int or list of points
+            )
+
+######## Save weights to file ##########
+
+
+########### Graph results ##############
+if(callFit == 1):
+    plot.plot(resultsA.history['acc'])
+    plot.plot(resultsA.history['val_acc'])
+    plot.title('model accuracy')
+    plot.ylabel('Accuracy')
+    plot.xlabel('Epoch #')
+    plot.legend(['training', 'testing'], loc='upper right')
+    plot.show()
 
 ########################################
 end = timeit.default_timer()
 print("Run time (seconds): ",end-start)#calculates total run time
-'''
+
 
 ########################################
-end = timeit.default_timer()
-print("Run time (seconds): ",end-start)#calculates total run time
-plot.plot(graphX,graphY)#plots graph
-'''
 
 
 '''

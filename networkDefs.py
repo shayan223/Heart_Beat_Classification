@@ -136,6 +136,7 @@ def time_series_network(sampleCount,atrNum,numberOfClasses):
                                      go_backwards=False, 
                                      stateful=False, 
                                      unroll=False))
+    model.add(keras.layers.Dense(numberOfClasses, activation='softmax'))
     model.compile(loss='sparse_categorical_crossentropy',
                   optimizer='adam', 
                   metrics=['accuracy'])

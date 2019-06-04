@@ -1,0 +1,47 @@
+Current progress and analysis: 
+	First, a problem encountered was that the 0 padding, while successful at
+shaping the data for computation, adds alot of useless noise when considering 
+the weights of individual audio points used for classification.
+	Currently networks "testConvolutional", "basicConvolutional",
+and "Convolutional_B" all correctly compile and run, however the memory required
+to test basicConvolutional and testConvolutional is incredibly large and thus
+untestable on any machine currently available to me. The names used are as 
+defined in the networkDefs.py file.
+	The architecture used in "testConvolutional" starts with 2 convolutional
+layers, a dropout layer, a one dimensional max pooling layer, another
+convolutional layer, a flatten layer, then a dense layer to classify, where all 
+convolutions are one dimensional. The single dimension is because the data is 
+being represented as a one dimensional array of single audio signals. Max - 
+pooling is used to minimise the effects of the 0 padding by placing emphasis
+on the maximum value in a given window (a pool size of 4 was used). However
+this has a limited affect on long strings of 0 padding, which is why pooling
+happens twice in an attempt to minimise the affects of the padding.
+	The "basicConvolutional" network is very similar to the 
+"testConvolutional" with the addition of two extra dense layers and different
+positioned pooling layers. However the affects of these changes are uncertain
+due to the testing limitations of the hardware currently available.
+	The network that does work, at least on a conventional machine (ie my
+gpu-less laptop), "Convolutional_B", works with far more memory efficiency by
+using far larger pool sizes in its pooling layers. However this is likely a 
+large contributor in the network's poor accuracy, which is currently around 
+20%. While the pool size increase allowed it to cut down memory use by several
+orders of magnitude, it clearly far over generalised the data. Another negative
+impact on the accuracy is likely caused by the lack of data. With only 
+aproximately 200 audio files, it becomes quite difficult to create a
+generalisable classifier. The primary issue with the data itself is that each 
+individual audio file, after being padded to the longest file in
+the dataset, is almost 400k data points, which makes operations on each row in 
+our data input very computationaly and memory heavy.
+	
+
+future tests:
+	With more time, many more methods can be tested to likely increase the
+accuracy of the neural network. First I would like test the affects of a 
+recurrent neural network on the audio, as audio data is within the time domain
+playing to the advantages of a recurrent network. Another possibility is to 
+reduce the amount of data by using a FFT (or other methods) to convert away from
+the time domain. In addition, one could analyse the data in two dimensions
+rather than one by converting the audio into a mel spectrogram (a 2d image) 
+and train the network on the resulting spectrogram images.
+
+

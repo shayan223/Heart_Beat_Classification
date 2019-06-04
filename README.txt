@@ -8,6 +8,8 @@ implementations to create a classifier aimed to classify
 heart conditions as either extrahls, murmur, normal, or artifact
 using digital stethoscope audio.
 
+Data Base found at: https://www.kaggle.com/kinguistics/heartbeat-sounds
+
 Testing: There was no direct unit testing for this project as
 the focus was on the construction of a classifier, which either
 fails as a whole, or correctly compiles. However different networks
@@ -30,12 +32,6 @@ the chosen neural network and display its architecture. Setting it to 1 will
 begin training the network and display its progress and accuracy. The 
 epochCount variable will determine how many epochs of training the model
 will train for if callFit is set to 1.
-
-Current progress: Currently networks testConvolutional, basicConvolutional,
-and Convolutional_B all correctly compile and run, however 
-
-future tests:
-
 
 
 

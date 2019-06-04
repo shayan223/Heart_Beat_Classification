@@ -1,10 +1,10 @@
 import numpy as np
 #from keras import layers
-import keras
+#import keras
 import scipy.io.wavfile as wavio
 import timeit
 import matplotlib.pyplot as plot
-import seaborn as sb
+#import seaborn as sb
 import pandas as pd
 import networkDefs
 
@@ -14,7 +14,11 @@ setA = pd.read_csv("set_a.csv")
 setA = setA.drop(columns="sublabel")#no sublables, not necesary
 setA = setA.dropna(axis=0)#remove all unlabled rows
 
-
+######## Training parameters ########
+#0 = don't train
+#1 = train
+callFit = 1 #flags whether or not to train
+epochCount = 1 #number of epochs to be trained upon
 ######## Prepare training data ##########
 data = []
 rate = []
@@ -123,15 +127,12 @@ networkA = networkDefs.Convolutional_B(dataCount,atrNum,classCount)
 data = np.expand_dims(data,axis=2)
 labelsAsNum = np.expand_dims(labelsAsNum,axis=1)
 
-networkA.summary()
+networkA.summary()#comment out when recurrent network is being used
 
 #callFit to 1 trains the network and graphs the 
 #results/accuracy.
 #if you want to analyse the network without training
-#just change callFit to 0.
-
-callFit = 0 #flags whether or not to train
-epochCount = 1 #number of epochs to be trained upon
+#just change callFit to 0. (at top of file)
 
 if(callFit == 1):
     resultsA = networkA.fit(
@@ -151,7 +152,7 @@ if(callFit == 1):
             )
 
 ######## Save weights to file ##########
-
+#for future implementation
 
 ########### Graph results ##############
 if(callFit == 1):

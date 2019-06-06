@@ -119,7 +119,7 @@ dataCount = data.shape[0]#number of data entries
 #where /networkname/ is the function of the 
 #desired network in networkDefs.py
 
-networkA = networkDefs.time_series_network(dataCount,atrNum,classCount)
+networkA = networkDefs.Convolutional_B(dataCount,atrNum,classCount)
 
 ###### Train neural network ############
 #Reshape data to 3d for network
@@ -127,7 +127,7 @@ networkA = networkDefs.time_series_network(dataCount,atrNum,classCount)
 data = np.expand_dims(data,axis=2)
 labelsAsNum = np.expand_dims(labelsAsNum,axis=1)
 
-#networkA.summary()#comment out when recurrent network is being used
+networkA.summary()#comment out when recurrent network is being used
 
 #callFit to 1 trains the network and graphs the 
 #results/accuracy.
